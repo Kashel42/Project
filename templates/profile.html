@@ -258,7 +258,14 @@
             <a href="/logout" class="btn btn-outline-light">Выйти</a>
         </div>
     </nav>
-
+    <div class="container mt-3">
+        <div class="alert alert-info">
+            🗓️ Сегодня: {{ current_date }}
+            {% if current_streak > 0 %}
+                | 🔥 Серия: {{ current_streak }} дней подряд
+            {% endif %}
+        </div>
+    </div>
     <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -291,47 +298,67 @@
                 </form>
             </div>
         </div>
-
-        <!-- Список привычек -->
-        <div class="habits-list">
-            {% for habit in habits %}
-            <div class="card mb-3 {{ 'border-success' if habit.completed }}">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">
-                                {% if habit.completed %}
-                                    ✅
-                                {% else %}
-                                    ⭕
-                                {% endif %}
-                                {{ habit.name }}
-                            </h5>
-                            <small class="text-muted">Добавлена: {{ habit.date }}</small>
-                        </div>
-                        <div>
-                            <a href="/toggle/{{ habit.id }}" class="btn btn-{{ 'success' if habit.completed else 'outline-secondary' }} btn-sm">
-                                {{ 'Выполнено' if habit.completed else 'Не выполнено' }}
-                            </a>
-                            <a href="/delete/{{ habit.id }}" class="btn btn-outline-danger btn-sm"
-                               onclick="return confirm('Удалить эту привычку?')">
-                                Удалить
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <div class="card mb-4">
+    <div class="card-header">⚡ Быстрые действия</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <a href="/complete_all" class="btn btn-success w-100"
+                   onclick="return confirm('Отметить ВСЕ привычки выполненными?')">
+                    ✅ Выполнить все привычки
+                </a>
+                <small class="text-muted">Отметит все ваши привычки как выполненные</small>
             </div>
-            {% else %}
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5>Пока нет привычек</h5>
-                    <p class="text-muted">Добавьте свою первую привычку!</p>
-                </div>
+            <div class="col-md-6 mb-2">
+                <a href="/reset_all" class="btn btn-warning w-100"
+                   onclick="return confirm('Сбросить статус ВСЕХ привычек?')">
+                    🔄 Сбросить все привычки
+                </a>
+                <small class="text-muted">Сбросит статус всех привычек на "не выполнено"</small>
             </div>
-            {% endfor %}
         </div>
     </div>
+</div>
+        <!-- Список привычек -->
+ <div class="habits-list">
+    {% for habit in habits %}
+    <div class="card mb-3 {{ 'border-success' if habit.completed }}">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">
+                        {% if habit.completed %}
+                            ✅
+                        {% else %}
+                            ⭕
+                        {% endif %}
+                        {{ habit.name }}
+                    </h5>
+                    <small class="text-muted">Добавлена: {{ habit.date }}</small>
+                </div>
+                <div class="btn-group">
+                    <a href="/toggle/{{ habit.id }}" class="btn btn-{{ 'success' if habit.completed else 'outline-secondary' }}">
+                        {{ 'Выполнено' if habit.completed else 'Не выполнено' }}
+                    </a>
+                    <a href="/delete/{{ habit.id }}" class="btn btn-outline-danger"
+                       onclick="return confirm('Удалить привычку "{{ habit.name }}"?')">
+                        Удалить
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card text-center">
+        <div class="card-body">
+            <h5>Пока нет привычек</h5>
+            <p class="text-muted">Добавьте свою первую привычку!</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>>
 </body>
 </html>
