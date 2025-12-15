@@ -3,11 +3,11 @@ import sqlite3
 import os
 
 app = Flask(__name__)
-app.secret_key = 'simple_secret_key_123'
+app.secret_key = 'Secret_key'
 DATABASE = 'habits.db'
 
 
-# Инициализация базы данных (ТОЛЬКО ПРИ ПЕРВОМ ЗАПУСКЕ)
+# Инициализация базы данных
 def init_db():
     # Проверяем, существует ли уже база данных
     if os.path.exists(DATABASE):
@@ -40,7 +40,7 @@ def init_db():
     # Таблица выполнения
     c.execute('''
         CREATE TABLE habit_logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY,
             habit_id INTEGER,
             username TEXT,
             log_date TEXT DEFAULT CURRENT_DATE,
@@ -176,6 +176,54 @@ def get_stats(username):
     }
 
 
+def get_current_streak(username):
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+
+    # Проверяем, были ли привычки выполнены вчера
+    c.execute('''
+        SELECT COUNT(DISTINCT habit_id) 
+        FROM habit_logs 
+        WHERE username = ? 
+          AND log_date = date('now', '-1 day') 
+          AND completed = 1
+    ''', (username,))
+
+    yesterday_completed = c.fetchone()[0]
+
+    # Если вчера ничего не сделано, серия прервана
+    if yesterday_completed == 0:
+        return 0
+
+    # Считаем дни подряд
+    c.execute('''
+        WITH RECURSIVE dates(date) AS (
+            SELECT date('now', '-1 day')
+            UNION ALL
+            SELECT date(date, '-1 day')
+            FROM dates
+            WHERE date >= date('now', '-30 day')
+        )
+        SELECT COUNT(*) as streak
+        FROM dates d
+        WHERE EXISTS (
+            SELECT 1 FROM habit_logs hl
+            WHERE hl.username = ?
+              AND hl.log_date = d.date
+              AND hl.completed = 1
+        )
+        AND NOT EXISTS (
+            SELECT 1 FROM habit_logs hl
+            WHERE hl.username = ?
+              AND hl.log_date = d.date
+              AND hl.completed = 0
+        )
+    ''', (username, username))
+
+    result = c.fetchone()
+    conn.close()
+    return result[0] if result else 0
+
 # Маршруты
 @app.route('/')
 def index():
@@ -235,11 +283,18 @@ def profile():
 
     habits = get_user_habits(session['username'])
     stats = get_stats(session['username'])
+    current_streak = get_current_streak(session['username'])
+
+    # Получаем текущую дату
+    import datetime
+    current_date = datetime.datetime.now().strftime("%d.%m.%Y")
 
     return render_template('profile.html',
                            username=session['username'],
                            habits=habits,
-                           stats=stats)
+                           stats=stats,
+                           current_streak=current_streak,
+                           current_date=current_date)
 
 
 @app.route('/add_habit', methods=['POST'])
@@ -275,6 +330,72 @@ def delete_habit_route(habit_id):
     return redirect(url_for('profile'))
 
 
+@app.route('/complete_all')
+def complete_all():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+
+    # Получаем все привычки пользователя
+    c.execute('SELECT id FROM habits WHERE username = ?', (session['username'],))
+    habits = c.fetchall()
+
+    # Для каждой привычки отмечаем как выполненную
+    for habit in habits:
+        habit_id = habit[0]
+
+        # Проверяем, есть ли уже запись на сегодня
+        c.execute('''
+            SELECT completed FROM habit_logs 
+            WHERE habit_id = ? AND log_date = date('now') AND username = ?
+        ''', (habit_id, session['username']))
+
+        current = c.fetchone()
+
+        if current:
+            # Если есть запись, обновляем на "выполнено"
+            if current[0] != 1:
+                c.execute('''
+                    UPDATE habit_logs SET completed = 1 
+                    WHERE habit_id = ? AND log_date = date('now') AND username = ?
+                ''', (habit_id, session['username']))
+        else:
+            # Если нет записи, создаем новую
+            c.execute('''
+                INSERT INTO habit_logs (habit_id, username, completed) 
+                VALUES (?, ?, 1)
+            ''', (habit_id, session['username']))
+
+    conn.commit()
+    conn.close()
+
+    flash('Все привычки отмечены как выполненные! 🎉', 'success')
+    return redirect(url_for('profile'))
+
+
+@app.route('/reset_all')
+def reset_all():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+
+    # Сбрасываем все привычки на сегодня
+    c.execute('''
+        UPDATE habit_logs 
+        SET completed = 0 
+        WHERE username = ? AND log_date = date('now')
+    ''', (session['username'],))
+
+    conn.commit()
+    conn.close()
+
+    flash('Статус всех привычек сброшен!', 'info')
+    return redirect(url_for('profile'))
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -282,7 +403,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-# Инициализация при запуске (БЕЗ УДАЛЕНИЯ СУЩЕСТВУЮЩЕЙ БАЗЫ)
+# Инициализация при запуске
 if __name__ == '__main__':
     init_db()  # Создает базу только если её нет
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=7777)
