@@ -3,7 +3,7 @@ import sqlite3
 import os
 
 app = Flask(__name__)
-app.secret_key = 'Secret_key'
+app.secret_key = 'simple_secret_key_123'
 DATABASE = 'habits.db'
 
 
@@ -107,10 +107,22 @@ def get_user_habits(username):
 
     result = []
     for habit in habits:
+        # Форматируем дату - берем только дату без времени
+        created_date = habit[2]
+        if created_date:
+            # Если дата содержит время, берем только дату
+            date_parts = created_date.split(' ')
+            if len(date_parts) > 1:
+                formatted_date = date_parts[0]  # Берем только дату (первую часть)
+            else:
+                formatted_date = created_date
+        else:
+            formatted_date = "Неизвестно"
+
         result.append({
             'id': habit[0],
             'name': habit[1],
-            'date': habit[2],
+            'date': formatted_date,  # Используем отформатированную дату
             'completed': bool(habit[3])
         })
     return result
@@ -276,14 +288,54 @@ def registration():
     return render_template('registration.html')
 
 
+def get_trend_data(username, days=7):
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+
+    trend_data = []
+
+    # Получаем данные за последние N дней
+    for i in range(days):
+        day = f"date('now', '-{i} day')"
+        c.execute(f'''
+            SELECT COUNT(DISTINCT hl.habit_id) as completed_count
+            FROM habit_logs hl
+            WHERE hl.username = ? 
+              AND hl.log_date = {day}
+              AND hl.completed = 1
+        ''', (username,))
+
+        result = c.fetchone()
+        trend_data.insert(0, result[0] if result else 0)
+
+    conn.close()
+    return trend_data
+
+
 @app.route('/profile')
 def profile():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    habits = get_user_habits(session['username'])
+    # Получаем параметр фильтра из URL
+    filter_type = request.args.get('filter', 'all')
+
+    # Получаем все привычки
+    all_habits = get_user_habits(session['username'])
+
+    # Фильтруем привычки на сервере
+    if filter_type == 'completed':
+        habits = [h for h in all_habits if h['completed']]
+    elif filter_type == 'pending':
+        habits = [h for h in all_habits if not h['completed']]
+    else:
+        habits = all_habits
+
     stats = get_stats(session['username'])
     current_streak = get_current_streak(session['username'])
+
+    # Получаем данные для линии тренда
+    trend_data = get_trend_data(session['username'])
 
     # Получаем текущую дату
     import datetime
@@ -294,7 +346,8 @@ def profile():
                            habits=habits,
                            stats=stats,
                            current_streak=current_streak,
-                           current_date=current_date)
+                           current_date=current_date,
+                           trend_data=trend_data)
 
 
 @app.route('/add_habit', methods=['POST'])
@@ -390,6 +443,12 @@ def reset_all():
         WHERE username = ? AND log_date = date('now')
     ''', (session['username'],))
 
+    # Также удаляем записи о выполнении на сегодня
+    c.execute('''
+        DELETE FROM habit_logs 
+        WHERE username = ? AND log_date = date('now') AND completed = 0
+    ''', (session['username'],))
+
     conn.commit()
     conn.close()
 
@@ -406,4 +465,4 @@ def logout():
 # Инициализация при запуске
 if __name__ == '__main__':
     init_db()  # Создает базу только если её нет
-    app.run(debug=True, port=7777)
+    app.run(debug=True,host='0.0.0.0', port=7777)
