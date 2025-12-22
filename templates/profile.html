@@ -3,10 +3,11 @@
 <head>
     <title>Мои привычки</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-    /* Основные стили */
+    /* Основные стили - КРАСНО-РОЗОВАЯ ТЕМА ПО УМОЛЧАНИЮ */
     body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
         min-height: 100vh;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -17,34 +18,30 @@
 
     /* Навигация */
     .navbar {
-        background: rgba(0, 0, 0, 0.9) !important;
+        background: rgba(139, 0, 0, 0.9) !important;
         backdrop-filter: blur(10px);
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 20px rgba(139, 0, 0, 0.2);
     }
 
     .navbar-brand {
         font-weight: 700;
         font-size: 1.5rem;
+        color: #fff !important;
     }
 
     /* Карточки */
     .card {
         border: none;
         border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.95);
-        transition: all 0.3s ease;
         margin-bottom: 1.5rem;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        border-left: 3px solid #ff6b6b;
     }
 
     .card-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
         color: white;
         border-radius: 15px 15px 0 0 !important;
         border: none;
@@ -55,53 +52,74 @@
     .btn {
         border-radius: 10px;
         font-weight: 600;
-        transition: all 0.3s ease;
         border: none;
         padding: 10px 20px;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        color: white;
     }
 
     .btn-success {
-        background: linear-gradient(135deg, #56ab2f, #a8e6cf);
-        box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
+        background: linear-gradient(135deg, #ff7eb3, #ff758c);
+        box-shadow: 0 4px 15px rgba(255, 126, 179, 0.4);
+        color: white;
     }
 
     .btn-danger {
-        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        background: linear-gradient(135deg, #d63384, #fd7e14);
+        box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
+        color: white;
     }
 
     .btn-outline-light {
         border: 2px solid white;
         color: white;
+        background: transparent;
     }
 
-    .btn-outline-light:hover {
-        background: white;
-        color: #333;
+    .btn-outline-secondary {
+        border: 2px solid #ffa8a8;
+        color: #ff6b6b;
+        background: transparent;
+    }
+
+    /* Кнопки фильтров */
+    .filter-btn {
+        border: 2px solid #ffa8a8;
+        color: #ff6b6b;
+        background: transparent;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .filter-btn:hover {
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+        color: white;
+        border-color: #ff6b6b;
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+        color: white;
+        border-color: #ff6b6b;
     }
 
     /* Формы */
     .form-control {
         border-radius: 10px;
-        border: 2px solid #e9ecef;
+        border: 2px solid #ffd6d6;
         padding: 12px 15px;
-        transition: all 0.3s ease;
+        background: #fff5f5;
     }
 
     .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        transform: translateY(-2px);
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+        background: white;
     }
 
     .input-group .form-control {
@@ -118,27 +136,22 @@
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1rem;
-        border-left: 5px solid #667eea;
-        transition: all 0.3s ease;
+        border-left: 5px solid #ff6b6b;
     }
 
     .habit-item.completed {
-        border-left-color: #56ab2f;
-        background: linear-gradient(135deg, #f8fff9, #e8f5e8);
-    }
-
-    .habit-item:hover {
-        transform: translateX(5px);
+        border-left-color: #ff7eb3;
+        background: linear-gradient(135deg, #fff5f9, #ffe6f0);
     }
 
     /* Статистика */
     .stats-card {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
         color: white;
         border-radius: 15px;
         padding: 2rem;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
     }
 
     .stats-number {
@@ -160,59 +173,36 @@
     }
 
     .alert-success {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
-        color: #155724;
+        background: linear-gradient(135deg, #ffecf1, #ffd9e4);
+        color: #c2185b;
+        border-left: 4px solid #ff7eb3;
     }
 
     .alert-danger {
-        background: linear-gradient(135deg, #f8d7da, #f1b0b7);
-        color: #721c24;
+        background: linear-gradient(135deg, #ffeaea, #ffd6d6);
+        color: #d32f2f;
+        border-left: 4px solid #ff6b6b;
     }
 
     .alert-info {
-        background: linear-gradient(135deg, #d1ecf1, #b8e0e6);
-        color: #0c5460;
+        background: linear-gradient(135deg, #fff0f5, #ffe6f0);
+        color: #c2185b;
+        border-left: 4px solid #ffa8a8;
     }
 
-    /* Главная страница */
-    .hero-section {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 4rem 2rem;
-        text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        margin-top: 2rem;
+    .alert-warning {
+        background: linear-gradient(135deg, #fff5e6, #ffebcc);
+        color: #ff8c00;
+        border-left: 4px solid #fd7e14;
     }
 
-    .hero-title {
-        font-size: 3rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 1rem;
+    /* Стили для дневной цели */
+    .goal-card {
+        border-left: 5px solid #fd7e14;
     }
 
-    .hero-subtitle {
-        font-size: 1.2rem;
-        color: #6c757d;
-        margin-bottom: 2rem;
-    }
-
-    /* Анимации */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .fade-in {
-        animation: fadeIn 0.6s ease-out;
+    .goal-completed {
+        border-left-color: #ff7eb3 !important;
     }
 
     /* Адаптивность */
@@ -241,13 +231,125 @@
     .progress {
         height: 8px;
         border-radius: 10px;
-        background: #e9ecef;
+        background: #ffd6d6;
         overflow: hidden;
     }
 
     .progress-bar {
-        background: linear-gradient(135deg, #56ab2f, #a8e6cf);
+        background: linear-gradient(135deg, #ff7eb3, #ff758c);
         border-radius: 10px;
+    }
+
+    /* Бейджи */
+    .badge.bg-success {
+        background: linear-gradient(135deg, #ff7eb3, #ff758c) !important;
+    }
+
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #fd7e14, #ffa94d) !important;
+    }
+
+    .badge.bg-secondary {
+        background: linear-gradient(135deg, #ffa8a8, #ffc9c9) !important;
+        color: #ff6b6b !important;
+    }
+
+    .badge.bg-info {
+        background: linear-gradient(135deg, #ffa8a8, #ffd6d6) !important;
+        color: #ff6b6b !important;
+    }
+
+    .badge.bg-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8) !important;
+    }
+
+    /* Текстовые цвета */
+    .text-muted {
+        color: #ff8a8a !important;
+    }
+
+    /* Бордеры */
+    .border-success {
+        border-color: #ff7eb3 !important;
+    }
+
+    /* Заголовки */
+    h5 {
+        color: #ff6b6b;
+    }
+
+    /* Ссылки */
+    a {
+        color: #ff6b6b;
+    }
+
+    /* СТИЛИ ДЛЯ ЛИНИИ ТРЕНДА */
+    .trend-container {
+        padding: 15px 0;
+    }
+
+    .trend-line {
+        display: flex;
+        align-items: flex-end;
+        height: 80px;
+        gap: 10px;
+        position: relative;
+    }
+
+    .trend-point {
+        flex: 1;
+        background: linear-gradient(to top, #ff6b6b, #ffa8a8);
+        border-radius: 3px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .trend-point:hover {
+        background: linear-gradient(to top, #ff5252, #ff8a8a);
+        transform: scale(1.05);
+    }
+
+    .trend-label {
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.7rem;
+        color: #ff6b6b;
+    }
+
+    .trend-value {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #ff5252;
+    }
+
+    .trend-average {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ffc107;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .trend-average-label {
+        position: absolute;
+        top: -25px;
+        right: 0;
+        background: #ffc107;
+        color: white;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 0.7rem;
     }
 </style>
 </head>
@@ -286,6 +388,146 @@
             </div>
         </div>
 
+        <!-- ЛИНИЯ ТРЕНДА - ДОБАВЛЕНО -->
+        <div class="card mb-4">
+            <div class="card-header">📈 Линия тренда (последние 7 дней)</div>
+            <div class="card-body">
+                <div class="trend-container">
+                    {% set trend_data = trend_data or [0, 0, 0, 0, 0, 0, 0] %}
+                    {% set max_value = trend_data|max if trend_data|max > 0 else 1 %}
+                    {% set average = (trend_data|sum / trend_data|length)|round(1) %}
+                    {% set days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] %}
+
+                    <div class="trend-line">
+                        <!-- Линия среднего значения -->
+                        <div class="trend-average" style="top: {{ (1 - average/max_value) * 100 }}%">
+                            <div class="trend-average-label">Среднее: {{ average }}</div>
+                        </div>
+
+                        {% for i in range(7) %}
+                        {% set height = (trend_data[i] / max_value * 70) if max_value > 0 else 5 %}
+                        <div class="trend-point" style="height: {{ height }}px;" title="{{ days[i] }}: {{ trend_data[i] }} привычек">
+                            <div class="trend-value">{{ trend_data[i] }}</div>
+                            <div class="trend-label">{{ days[i] }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="row text-center">
+                            <div class="col">
+                                <div class="h5 mb-1">{{ trend_data|max }}</div>
+                                <small class="text-muted">Максимум</small>
+                            </div>
+                            <div class="col">
+                                <div class="h5 mb-1">{{ trend_data|min }}</div>
+                                <small class="text-muted">Минимум</small>
+                            </div>
+                            <div class="col">
+                                <div class="h5 mb-1 {{ 'text-success' if trend_data[6] > trend_data[5] else 'text-danger' if trend_data[6] < trend_data[5] else '' }}">
+                                    {% if trend_data[6] > trend_data[5] %}+{% endif %}{{ trend_data[6] - trend_data[5] }}
+                                </div>
+                                <small class="text-muted">За вчера</small>
+                            </div>
+                        </div>
+
+                        <!-- Легенда тренда -->
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">
+                                    <span style="display: inline-block; width: 10px; height: 10px; background: #ff6b6b; border-radius: 2px; margin-right: 5px;"></span>
+                                    Выполненные привычки
+                                </small>
+                                <small class="text-muted">
+                                    <span style="display: inline-block; width: 10px; height: 10px; background: #ffc107; border-radius: 2px; margin-right: 5px;"></span>
+                                    Среднее значение: {{ average }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ДНЕВНАЯ ЦЕЛЬ -->
+        <div class="card mb-4 goal-card {% if stats.completed >= 5 %}goal-completed{% endif %}">
+            <div class="card-body">
+                <h5 class="mb-3">🎯 Дневная цель</h5>
+                {% set target = 5 %} <!-- Цель: 5 привычек в день -->
+
+                <!-- Вычисляем процент выполнения -->
+                {% if target > 0 %}
+                    {% set percentage = (stats.completed * 100 / target)|round|int %}
+                    {% if percentage > 100 %}
+                        {% set display_percentage = 100 %}
+                    {% else %}
+                        {% set display_percentage = percentage %}
+                    {% endif %}
+                {% else %}
+                    {% set percentage = 0 %}
+                    {% set display_percentage = 0 %}
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <span class="h5">{{ stats.completed }}/{{ target }}</span>
+                        <span class="text-muted ms-2">привычек выполнено</span>
+                    </div>
+                    {% if stats.completed >= target %}
+                        <span class="badge bg-success p-2">
+                            🎉 Цель достигнута!
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning p-2">
+                            Осталось: {{ target - stats.completed }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Прогресс-бар -->
+                <div class="progress" style="height: 12px;">
+                    <div class="progress-bar {% if stats.completed >= target %}bg-success{% else %}bg-warning{% endif %}"
+                         role="progressbar"
+                         style="width: {{ display_percentage }}%;"
+                         aria-valuenow="{{ display_percentage }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-1">
+                    <small class="text-muted">0%</small>
+                    <small class="text-muted">{{ display_percentage }}%</small>
+                    <small class="text-muted">100%</small>
+                </div>
+
+                <!-- Мотивационное сообщение -->
+                <div class="mt-3">
+                    {% if stats.total == 0 %}
+                        <small class="text-muted">Добавьте первую привычку, чтобы начать!</small>
+                    {% elif stats.completed >= target %}
+                        <div class="alert alert-success p-2 mb-0">
+                            <small>⭐ <strong>Отличная работа!</strong> Вы достигли дневной цели!</small>
+                        </div>
+                    {% elif stats.completed == 0 %}
+                        <div class="alert alert-warning p-2 mb-0">
+                            <small>💪 <strong>Начните прямо сейчас!</strong> Выполните первую привычку сегодня.</small>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info p-2 mb-0">
+                            <small>🔥 <strong>Продолжайте в том же духе!</strong>
+                            {% if target - stats.completed == 1 %}
+                                Осталась всего 1 привычка до цели!
+                            {% else %}
+                                Осталось {{ target - stats.completed }} привычек до цели.
+                            {% endif %}
+                            </small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         <!-- Форма добавления -->
         <div class="card mb-4">
             <div class="card-body">
@@ -298,67 +540,141 @@
                 </form>
             </div>
         </div>
+
+        <!-- ФИЛЬТРЫ ПО СТАТУСУ БЕЗ JAVASCRIPT -->
         <div class="card mb-4">
-    <div class="card-header">⚡ Быстрые действия</div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                <a href="/complete_all" class="btn btn-success w-100"
-                   onclick="return confirm('Отметить ВСЕ привычки выполненными?')">
-                    ✅ Выполнить все привычки
-                </a>
-                <small class="text-muted">Отметит все ваши привычки как выполненные</small>
-            </div>
-            <div class="col-md-6 mb-2">
-                <a href="/reset_all" class="btn btn-warning w-100"
-                   onclick="return confirm('Сбросить статус ВСЕХ привычек?')">
-                    🔄 Сбросить все привычки
-                </a>
-                <small class="text-muted">Сбросит статус всех привычек на "не выполнено"</small>
-            </div>
-        </div>
-    </div>
-</div>
-        <!-- Список привычек -->
- <div class="habits-list">
-    {% for habit in habits %}
-    <div class="card mb-3 {{ 'border-success' if habit.completed }}">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">
-                        {% if habit.completed %}
-                            ✅
+            <div class="card-header">🔍 Фильтры привычек</div>
+            <div class="card-body">
+                <div class="btn-group w-100" role="group">
+                    <a href="/profile?filter=all" class="btn filter-btn {% if request.args.get('filter', 'all') == 'all' %}active{% endif %}">
+                        Все ({{ stats.total }})
+                    </a>
+                    <a href="/profile?filter=completed" class="btn filter-btn {% if request.args.get('filter') == 'completed' %}active{% endif %}">
+                        ✅ Выполненные ({{ stats.completed }})
+                    </a>
+                    <a href="/profile?filter=pending" class="btn filter-btn {% if request.args.get('filter') == 'pending' %}active{% endif %}">
+                        ⭕ Не выполненные ({{ stats.total - stats.completed }})
+                    </a>
+                </div>
+                <div class="mt-2">
+                    <small class="text-muted">
+                        {% if request.args.get('filter', 'all') == 'all' %}
+                            Показаны все привычки
+                        {% elif request.args.get('filter') == 'completed' %}
+                            Показаны только выполненные привычки
                         {% else %}
-                            ⭕
+                            Показаны только не выполненные привычки
                         {% endif %}
-                        {{ habit.name }}
-                    </h5>
-                    <small class="text-muted">Добавлена: {{ habit.date }}</small>
-                </div>
-                <div class="btn-group">
-                    <a href="/toggle/{{ habit.id }}" class="btn btn-{{ 'success' if habit.completed else 'outline-secondary' }}">
-                        {{ 'Выполнено' if habit.completed else 'Не выполнено' }}
-                    </a>
-                    <a href="/delete/{{ habit.id }}" class="btn btn-outline-danger"
-                       onclick="return confirm('Удалить привычку "{{ habit.name }}"?')">
-                        Удалить
-                    </a>
+                    </small>
                 </div>
             </div>
         </div>
-    </div>
-    {% else %}
-    <div class="card text-center">
-        <div class="card-body">
-            <h5>Пока нет привычек</h5>
-            <p class="text-muted">Добавьте свою первую привычку!</p>
+
+        <!-- Быстрые действия -->
+        <div class="card mb-4">
+            <div class="card-header">⚡ Быстрые действия</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <a href="/complete_all" class="btn btn-success w-100"
+                           onclick="return confirm('Отметить ВСЕ привычки выполненными?')">
+                            ✅ Выполнить все привычки
+                        </a>
+                        <small class="text-muted">Отметит все ваши привычки как выполненные</small>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <a href="/reset_all" class="btn btn-warning w-100"
+                           onclick="return confirm('Сбросить статус ВСЕХ привычек?')">
+                            🔄 Сбросить все привычки
+                        </a>
+                        <small class="text-muted">Сбросит статус всех привычек на "не выполнено"</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список привычек -->
+        <div id="habitsList">
+            {% set current_filter = request.args.get('filter', 'all') %}
+
+            {% for habit in habits %}
+                {% if current_filter == 'all' or
+                      (current_filter == 'completed' and habit.completed) or
+                      (current_filter == 'pending' and not habit.completed) %}
+                <div class="card mb-3 habit-card {{ 'border-success' if habit.completed }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1 habit-name">
+                                    {% if habit.completed %}
+                                        ✅
+                                    {% else %}
+                                        ⭕
+                                    {% endif %}
+                                    {{ habit.name }}
+                                </h5>
+                                <small class="text-muted">
+                                    Добавлена:
+                                    {% if habit.date and ' ' in habit.date %}
+                                        {{ habit.date.split(' ')[0].replace('-', '.') }}
+                                    {% elif habit.date %}
+                                        {{ habit.date }}
+                                    {% else %}
+                                        Неизвестно
+                                    {% endif %}
+                                </small>
+                                <br>
+                                <small class="badge bg-{{ 'success' if habit.completed else 'secondary' }}">
+                                    {{ 'Выполнено' if habit.completed else 'Не выполнено' }}
+                                </small>
+                            </div>
+                            <div class="btn-group">
+                                <a href="/toggle/{{ habit.id }}" class="btn btn-{{ 'success' if habit.completed else 'outline-secondary' }}">
+                                    {{ 'Выполнено' if habit.completed else 'Не выполнено' }}
+                                </a>
+                                <a href="/delete/{{ habit.id }}" class="btn btn-outline-danger"
+                                   onclick="return confirm('Удалить привычку "{{ habit.name }}"?')">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5>Пока нет привычек</h5>
+                    <p class="text-muted">Добавьте свою первую привычку!</p>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Сообщение если нет привычек по фильтру -->
+            {% if current_filter != 'all' and habits|selectattr('completed', 'equalto', (current_filter == 'completed'))|list|length == 0 and habits|length > 0 %}
+            <div class="card text-center no-results">
+                <div class="card-body">
+                    <h5><i class="fas fa-filter fa-lg mb-3"></i></h5>
+                    <h5>
+                        {% if current_filter == 'completed' %}
+                            Нет выполненных привычек
+                        {% else %}
+                            Нет не выполненных привычек
+                        {% endif %}
+                    </h5>
+                    <p class="text-muted">
+                        {% if current_filter == 'completed' %}
+                            Отметьте некоторые привычки как выполненные или добавьте новые
+                        {% else %}
+                            Все привычки выполнены! Отличная работа!
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    </div>>
 </body>
 </html>
