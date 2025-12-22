@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Трекер привычек{% endblock %}</title>
+    <title>Вход</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-    /* Основные стили */
+    /* Основные стили - КРАСНО-РОЗОВАЯ ТЕМА */
     body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
         min-height: 100vh;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -20,34 +17,30 @@
 
     /* Навигация */
     .navbar {
-        background: rgba(0, 0, 0, 0.9) !important;
+        background: rgba(139, 0, 0, 0.9) !important;
         backdrop-filter: blur(10px);
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 20px rgba(139, 0, 0, 0.2);
     }
 
     .navbar-brand {
         font-weight: 700;
         font-size: 1.5rem;
+        color: #fff !important;
     }
 
     /* Карточки */
     .card {
         border: none;
         border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.95);
-        transition: all 0.3s ease;
         margin-bottom: 1.5rem;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        border-left: 3px solid #ff6b6b;
     }
 
     .card-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
         color: white;
         border-radius: 15px 15px 0 0 !important;
         border: none;
@@ -58,53 +51,52 @@
     .btn {
         border-radius: 10px;
         font-weight: 600;
-        transition: all 0.3s ease;
         border: none;
         padding: 10px 20px;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        color: white;
     }
 
     .btn-success {
-        background: linear-gradient(135deg, #56ab2f, #a8e6cf);
-        box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
+        background: linear-gradient(135deg, #ff7eb3, #ff758c);
+        box-shadow: 0 4px 15px rgba(255, 126, 179, 0.4);
+        color: white;
     }
 
     .btn-danger {
-        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        background: linear-gradient(135deg, #d63384, #fd7e14);
+        box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
+        color: white;
     }
 
     .btn-outline-light {
         border: 2px solid white;
         color: white;
+        background: transparent;
     }
 
-    .btn-outline-light:hover {
-        background: white;
-        color: #333;
+    .btn-outline-secondary {
+        border: 2px solid #ffa8a8;
+        color: #ff6b6b;
+        background: transparent;
     }
 
     /* Формы */
     .form-control {
         border-radius: 10px;
-        border: 2px solid #e9ecef;
+        border: 2px solid #ffd6d6;
         padding: 12px 15px;
-        transition: all 0.3s ease;
+        background: #fff5f5;
     }
 
     .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        transform: translateY(-2px);
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+        background: white;
     }
 
     .input-group .form-control {
@@ -121,27 +113,22 @@
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1rem;
-        border-left: 5px solid #667eea;
-        transition: all 0.3s ease;
+        border-left: 5px solid #ff6b6b;
     }
 
     .habit-item.completed {
-        border-left-color: #56ab2f;
-        background: linear-gradient(135deg, #f8fff9, #e8f5e8);
-    }
-
-    .habit-item:hover {
-        transform: translateX(5px);
+        border-left-color: #ff7eb3;
+        background: linear-gradient(135deg, #fff5f9, #ffe6f0);
     }
 
     /* Статистика */
     .stats-card {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
         color: white;
         border-radius: 15px;
         padding: 2rem;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
     }
 
     .stats-number {
@@ -163,18 +150,27 @@
     }
 
     .alert-success {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
-        color: #155724;
+        background: linear-gradient(135deg, #ffecf1, #ffd9e4);
+        color: #c2185b;
+        border-left: 4px solid #ff7eb3;
     }
 
     .alert-danger {
-        background: linear-gradient(135deg, #f8d7da, #f1b0b7);
-        color: #721c24;
+        background: linear-gradient(135deg, #ffeaea, #ffd6d6);
+        color: #d32f2f;
+        border-left: 4px solid #ff6b6b;
     }
 
     .alert-info {
-        background: linear-gradient(135deg, #d1ecf1, #b8e0e6);
-        color: #0c5460;
+        background: linear-gradient(135deg, #fff0f5, #ffe6f0);
+        color: #c2185b;
+        border-left: 4px solid #ffa8a8;
+    }
+
+    .alert-warning {
+        background: linear-gradient(135deg, #fff5e6, #ffebcc);
+        color: #ff8c00;
+        border-left: 4px solid #fd7e14;
     }
 
     /* Главная страница */
@@ -183,14 +179,15 @@
         border-radius: 20px;
         padding: 4rem 2rem;
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 40px rgba(255, 107, 107, 0.15);
         margin-top: 2rem;
+        border-left: 5px solid #ff6b6b;
     }
 
     .hero-title {
         font-size: 3rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 1rem;
@@ -198,24 +195,8 @@
 
     .hero-subtitle {
         font-size: 1.2rem;
-        color: #6c757d;
+        color: #ff6b6b;
         margin-bottom: 2rem;
-    }
-
-    /* Анимации */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .fade-in {
-        animation: fadeIn 0.6s ease-out;
     }
 
     /* Адаптивность */
@@ -244,48 +225,140 @@
     .progress {
         height: 8px;
         border-radius: 10px;
-        background: #e9ecef;
+        background: #ffd6d6;
         overflow: hidden;
     }
 
     .progress-bar {
-        background: linear-gradient(135deg, #56ab2f, #a8e6cf);
+        background: linear-gradient(135deg, #ff7eb3, #ff758c);
         border-radius: 10px;
+    }
+
+    /* Бейджи */
+    .badge.bg-success {
+        background: linear-gradient(135deg, #ff7eb3, #ff758c) !important;
+    }
+
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #fd7e14, #ffa94d) !important;
+    }
+
+    .badge.bg-secondary {
+        background: linear-gradient(135deg, #ffa8a8, #ffc9c9) !important;
+        color: #ff6b6b !important;
+    }
+
+    .badge.bg-info {
+        background: linear-gradient(135deg, #ffa8a8, #ffd6d6) !important;
+        color: #ff6b6b !important;
+    }
+
+    .badge.bg-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ffa8a8) !important;
+    }
+
+    /* Текстовые цвета */
+    .text-muted {
+        color: #ff8a8a !important;
+    }
+
+    .text-success {
+        color: #ff7eb3 !important;
+    }
+
+    .text-danger {
+        color: #ff6b6b !important;
+    }
+
+    .text-warning {
+        color: #fd7e14 !important;
+    }
+
+    /* Бордеры */
+    .border-success {
+        border-color: #ff7eb3 !important;
+    }
+
+    .border-warning {
+        border-color: #fd7e14 !important;
+    }
+
+    .border-danger {
+        border-color: #ff6b6b !important;
+    }
+
+    /* Заголовки карточек */
+    h5 {
+        color: #ff6b6b;
+    }
+
+    h6 {
+        color: #ff8a8a;
+    }
+
+    /* Ссылки */
+    a {
+        color: #ff6b6b;
+    }
+
+    a:hover {
+        color: #ff5252;
+    }
+
+    /* Выделение поиска */
+    .search-highlight {
+        background-color: #ffe6e6;
+        padding: 2px 4px;
+        border-radius: 3px;
+        color: #ff5252;
+    }
+
+    /* Панель поиска */
+    .search-clear {
+        color: #ff6b6b;
+    }
+
+    /* Карточка цели */
+    .goal-card {
+        border-left: 5px solid #fd7e14;
+    }
+
+    .goal-completed {
+        border-left-color: #ff7eb3 !important;
     }
 </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">
-                <i class="fas fa-chart-line"></i> Трекер привычек
-            </span>
-            <span class="text-light" id="current-date">{{ today }}</span>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <h2 class="text-center mb-4">Вход</h2>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <input type="text" name="username" class="form-control" placeholder="Имя пользователя" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="/registration">Нет аккаунта? Зарегистрируйтесь</a>
+                </div>
+            </div>
         </div>
-    </nav>
-
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Обновляем дату каждую секунду
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            document.getElementById('current-date').textContent =
-                now.toLocaleDateString('ru-RU', options);
-        }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-    </script>
 </body>
 </html>
